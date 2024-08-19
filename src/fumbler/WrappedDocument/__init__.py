@@ -17,10 +17,6 @@ class WrappedDocument:
     doc_numbers = [int(match.group(1)) for s in doc_names if (match := doc_number_pattern.search(s))]
     self.doc.Label = name + " v" + str(1 + (max(doc_numbers) if doc_numbers else 0))
   
-  @staticmethod
-  def close_all():
-    [FreeCAD.closeDocument(d) for d in FreeCAD.listDocuments()]
-
   from ._maintenance import flush, recompute, remove_and_clean
   from ._plot import plot_line, plot_arc
   from ._draw import draw_rect, draw_rounded_rect, draw_chamfered_rect, draw_polygon
