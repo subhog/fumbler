@@ -13,8 +13,7 @@ class WrappedPart:
   from ._maintenance import hide, remove_and_clean, rename, recolor
   from ._transform import move, elevate, rotate
   from ._boolean import cut, fuse, intersect
-  from ._edges import chamfer, fillet, fillet_all, fillet_exact
-
+  from ._edges import chamfer, fillet
 
 
   def make_copy(self):

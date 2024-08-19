@@ -4,7 +4,6 @@ import math
 
 from .WrappedDocument import WrappedDocument
 
-
 epsilon = 0.0001
 
 
