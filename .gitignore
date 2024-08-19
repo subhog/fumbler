@@ -1,0 +1,8 @@
+__pycache__
+*.pyc
+
+*.step
+*.stl
+
+*.gitignored
+*.gitignored.*
