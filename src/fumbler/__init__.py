@@ -4,6 +4,8 @@ import math
 
 from .WrappedDocument import WrappedDocument
 
+from .utils import TeethInset, TeethSide
+
 epsilon = 0.0001
 
 
