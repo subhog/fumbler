@@ -19,7 +19,8 @@ class WrappedDocument:
   
   from ._maintenance import flush, recompute, remove_and_clean
   from ._plot import plot_line, plot_arc
-  from ._draw import draw_rect, draw_rounded_rect, draw_chamfered_rect, draw_polygon
+  from ._draw import draw_polygon
+  from ._draw_rectangle import draw_rect, draw_rounded_rect, draw_chamfered_rect
   from ._draw_circle import draw_circle, draw_capped_circle, draw_pointy_circle, draw_right_pointy_circle, draw_left_pointy_circle
 
 
