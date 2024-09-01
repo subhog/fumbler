@@ -1,0 +1,349 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    
+    <style>
+      html, body {
+        min-height: 100dvh;
+        padding: 0px;
+        margin: 0px;
+
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        /* line-height: 161%; */
+      }
+
+      div, span, * {
+        box-sizing: border-box;
+        /* padding: 0px; */
+        /* margin: 0px; */
+      }
+
+      #root {
+        max-width: 720px;
+        margin: 0px auto;
+        padding: 0px 0px 80px;
+      }
+
+      #logo {
+        display: block;
+        width: 270px;
+        margin: 30px auto -30px;
+      }
+
+      #footer {
+        display: block;
+        width: 180px;
+        margin: 80px auto 10px;
+      }
+      
+      #footer2 {
+        margin: 0px auto 40px;
+        text-align: center;
+        color: #e6cf9f;
+        font-family: "Roboto Slab", sans-serif;
+        font-weight: 600;
+      }
+
+      h1 {
+        margin: 80px 0px;
+        padding: 10px 20px;
+        border-bottom: 8px solid #e6cf9f;
+        /* border-bottom: 2px solid #206080; */
+        font-family: "Roboto Slab", sans-serif;
+        font-weight: 900;
+        font-size: 48px;
+        position: relative;
+      }
+      h1::after {
+        content: "";
+        display: block;
+        font-size: 1px;
+        line-height: 2px;
+        height: 2px;
+        background: #422e08;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        bottom: -10px;
+      }
+      
+      h2 {
+        margin: 80px 0px 40px;
+        padding: 20px;
+        background: #e6cf9f;
+        color: #422e08;
+        border-bottom: 2px solid #806020;
+        font-family: "Roboto Slab", sans-serif;
+        font-weight: 600;
+      }
+
+      h3 {
+        margin: 40px 0px 20px;
+        border-bottom: 2px solid #806020;
+      }
+
+      h3 > code {
+        padding: 8px 20px;
+        background: #f0e0c0;
+        color: #806020;
+        font-family: monospace;
+        display: inline-block;
+      }
+
+      p, pre {
+        margin-left: 30px;
+        margin-right: 30px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 26px;
+        text-align: justify;
+      }
+
+      pre {
+        background: #c0e0f0;
+        color: #206080;
+        padding: 5px;
+
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      code {
+        background: #c0e0f0;
+        color: #206080;
+        padding: 0px 5px;
+        font-family: "Roboto Mono", monospace;
+        font-weight: 400;
+      }
+
+      pre > code {
+        background: none;
+        padding: 0px;
+      }
+
+      blockquote {
+        background: #dceef7;
+        /* background: #f9f3e7; */
+        margin: 0px 30px;
+      }
+
+      blockquote > p {
+        font-family: "Roboto Mono", monospace;
+        font-size: 12px;
+        line-height: 20px;
+        padding: 5px 15px;
+        margin: 0px;
+        color: #206080;
+        /* color: #422e08; */
+      }
+
+      table {
+        border-collapse: collapse;
+        width: calc(100% - 60px) !important;
+        margin: 30px;
+      }
+
+      td {
+        border: 2px solid #c0e0f0;
+        padding: 0px;
+      }
+
+      td > pre {
+        margin: 0px;
+      }
+
+      td:has(img) {
+        text-align: center;
+        background: #001018;
+      }
+
+      td > img {
+        max-height: 160px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <img id="logo" src="./assets/fumbler.png"/>
+    
+
+      <h1 id="fumbler">Fumbler</h1>
+<p>Fumbler is a small library created in order to make it easier to
+create simple parts in FreeCAD.</p>
+<p>The reason is exists is that so the author, a programmer, can have a
+good time writing code that generate things to make on a 3D printer. The
+reason it’s published is so that we can easily share raw shape
+definitions, collaborate, and adjust designs to our particular
+needs.</p>
+<p>One great advantage of Fumbler is that you can freely mix and match
+the programmatic approach with FreeCAD edit interface. I often leverage
+this by creating complex boolean operations in the code (where it is
+faster for me) and then finishing my part with edge operations in the
+Part workspace (where it’s much easier to visualize).</p>
+<h1 id="installation">Installation</h1>
+<h1 id="wrappeddocument">WrappedDocument</h1>
+<p>This is the class that wraps a FreeCAD document and allows us to
+create new parts inside it.</p>
+<p>Your typical Fumbler script will first create a single document
+object, then use it all over the place to <code>make</code> new
+things.</p>
+<table style="width:86%;">
+<colgroup>
+<col style="width: 86%" />
+</colgroup>
+<tbody>
+<tr>
+<td><pre><code>A = fumbler.create_wrapped_document(&quot;A cube with a hole&quot;)
+A.make_cube(20, 20, 20).cut([
+  A.make_cylinder(5, 20).move((10, 10, 0))
+])
+A.flush()</code></pre></td>
+</tr>
+<tr>
+<td><img src="./assets/cube_one.png" /></td>
+</tr>
+</tbody>
+</table>
+<p>Don’t forget to <code>flush</code> at the end of your script to
+refresh the UI!</p>
+<h2 id="creating-things">Creating things</h2>
+<p>You should use <code>plot_*</code>, <code>draw_*</code> or
+<code>make_*</code> methods, depending on whether the thing you’re
+creating is one, two or three-dimensional.</p>
+<h2 id="plot-methods">Plot methods</h2>
+<p>These are mostly used internally by <code>draw_</code> methods, but
+may come in handy if you want to construct a flat shape from individual
+segments.</p>
+<h3
+id="plot_linex0-y0-x1-y1"><code>plot_line(x0, y0, x1, y1)</code></h3>
+<blockquote>
+<p>(x0, y0) – line starting point<br />
+(x1, y1) - line ending point<br />
+</p>
+</blockquote>
+<p>Draws a straight line between two points.</p>
+<h3
+id="plot_arccx-cy-r-startangledeg-endangledeg"><code>plot_arc(cx, cy, r, startAngleDeg, endAngleDeg)</code></h3>
+<blockquote>
+<p>(cx, cy) - center of the circle<br />
+r - radius of the circle<br />
+startAngleDeg – starting angle of the arc (0° being ???)<br />
+endAngleDeg – endign angle of the arc<br />
+</p>
+</blockquote>
+<p>Draws a circle arc around a center point.</p>
+<h2 id="draw-methods">Draw methods</h2>
+<h3
+id="draw_circler-capcirclecap.none-angle60-namecircle"><code>draw_circle(r, cap=CircleCap.None, angle=60, name="Circle")</code></h3>
+<blockquote>
+<p>r – radius of the circle<br />
+cap – cap method for the top part of the circle<br />
+angle – maximum overhang angle permitted<br />
+name – part name<br />
+</p>
+</blockquote>
+<p>Draws a circle with a given radius. The circle is contained in the
+base plane (<code>z=0</code>) and the (0, 0) point is the center. You
+can <code>move</code> and <code>rotate</code> the circle afterwards</p>
+<ul>
+<li><code>CircleCap.None</code> - draws a full circle</li>
+<li><code>CircleCap.Flat</code> - draws a</li>
+<li><code>CircleCap.Point</code> - draws</li>
+<li><code>CircleCap.RightPoint</code> - draws</li>
+<li><code>CircleCap.LeftPoint</code> - draws</li>
+</ul>
+<h3 id="draw_rect"><code>draw_rect()</code></h3>
+<h3 id="draw_rounded_rect"><code>draw_rounded_rect()</code></h3>
+<h3 id="draw_chamfered_rect"><code>draw_chamfered_rect()</code></h3>
+<h3 id="draw_polygon"><code>draw_polygon()</code></h3>
+<h3 id="draw_cubic"><code>draw_cubic()</code></h3>
+<h2 id="make-methods">Make methods</h2>
+<h3 id="make_cube"><code>make_cube()</code></h3>
+<h3 id="make_cylinder"><code>make_cylinder()</code></h3>
+<h3 id="make_loft"><code>make_loft()</code></h3>
+<h3 id="make_polyhedron"><code>make_polyhedron()</code></h3>
+<h3 id="make_fuse"><code>make_fuse()</code></h3>
+<h2 id="utilities">Utilities</h2>
+<h3 id="recompute"><code>recompute()</code></h3>
+<p>Recalculates the geometry inside a document after major
+modifications, like boolean or edge operations. Used internally in all
+such methods, so in most cases you don’t need to worry about recomputing
+yourself. But it’s here if you do things manually and things go
+awry.</p>
+<h3 id="flush"><code>flush()</code></h3>
+<p>Refreshes the UI and ensures the contents of the document are
+visible. Remember to <code>flush</code> at the end of your script!</p>
+<h3 id="remove_and_cleanpart"><code>remove_and_clean(part)</code></h3>
+<p>Removes a part and all its descendants from the document.</p>
+<p>The reason this is a bit tricky is that some operations (i.e. chamfer
+and fillet) require the original shape to remain in the document as a
+linked object. If we simply removed the part we want, these leftovers
+would linger in the document tree and pollute the element browser. The
+<code>remove_and_clean</code> method gets rid of all such potential
+ghosts.</p>
+<h1 id="wrappedpart">WrappedPart</h1>
+<p>This class wraps a FreeCAD Part object and makes it easier to
+manipulate it</p>
+<h2 id="geometric-operations">Geometric operations</h2>
+<h3 id="movedelta"><code>move(delta)</code></h3>
+<p>Moves the part by specified vector.</p>
+<pre><code># Create a cube with base centered on the base plane.
+A.make_cube(10, 10, 10).move((-5, -5, 0))</code></pre>
+<h3 id="elevatedz"><code>elevate(dz)</code></h3>
+<p>Shorthand for <code>move((0, 0, dz))</code>, moves the part on the z
+axis only.</p>
+<p>Most useful when distributing slices for the <code>make_loft</code>
+method.</p>
+<h3 id="rotateaxis-angle"><code>rotate(axis, angle)</code></h3>
+<p>Rotates the element around specified axis.</p>
+<table style="width:69%;">
+<colgroup>
+<col style="width: 69%" />
+</colgroup>
+<tbody>
+<tr>
+<td><pre><code># Create a horizontal cylinder
+A.make_cylinder(2, 20).rotate((1, 0, 0), -90)</code></pre></td>
+</tr>
+<tr>
+<td><img src="./assets/cylinder_y.png" /></td>
+</tr>
+</tbody>
+</table>
+<h2 id="boolean-operations">Boolean operations</h2>
+<h3 id="fuse"><code>fuse()</code></h3>
+<h3 id="cut"><code>cut()</code></h3>
+<h3 id="intersect"><code>intersect()</code></h3>
+<h2 id="edge-operations">Edge operations</h2>
+<h3 id="chamfer"><code>chamfer()</code></h3>
+<h3 id="fillet"><code>fillet()</code></h3>
+<h2 id="utilities-1">Utilities</h2>
+<h3 id="remove_and_clean"><code>remove_and_clean()</code></h3>
+<h3 id="renamename"><code>rename(name)</code></h3>
+<h3
+id="recolorcolor-transparency"><code>recolor(color, transparency)</code></h3>
+<h3 id="hide"><code>hide()</code></h3>
+<h1 id="global-utilities">Global utilities</h1>
+<h3 id="epsilon"><code>epsilon</code></h3>
+<p>Defined as <code>0.001</code> or similarly imperceptible number, it’s
+a handy constant you can use if you need to slightly shift two shapes
+before performing a boolean operation.</p>
+
+
+
+
+      
+
+      
+
+      <img id="footer" src="./assets/fumble.png"/>
+      <div id="footer2">Fumbler by Subhog</div>
+    </div>
+  </body>
+</html>
+

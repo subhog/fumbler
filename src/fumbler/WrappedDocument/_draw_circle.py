@@ -10,6 +10,17 @@ def draw_circle(
   r,
   name = "Circle"
 ):
+  """
+    Draws a flat circle on z=0 plane,
+    with center in (0, 0, 0) and given radius.
+
+    Parameters:
+    r (float): Radius of the circle
+    name (string): Name of the drawing
+
+    Returns:
+    WrappedPart<Part.Face>: 
+  """
   arc = self.doc.addObject("Part::Circle")
   arc.Radius = r
 
