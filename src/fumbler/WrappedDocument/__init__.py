@@ -18,12 +18,12 @@ class WrappedDocument:
     self.doc.Label = name + " v" + str(1 + (max(doc_numbers) if doc_numbers else 0))
   
   from ._maintenance import flush, recompute, remove_and_clean
-  from ._plot import plot_line, plot_arc
-  from ._draw import draw_polygon, draw_cubic, draw_flat_cubic
+  from ._plot import plot_line, plot_arc, plot_helix
+  from ._draw import draw_polygon, draw_cubic, draw_flat_cubic, draw_svg
   from ._draw_rectangle import draw_rect, draw_rounded_rect, draw_chamfered_rect
   from ._draw_circle import draw_circle, draw_capped_circle, draw_pointy_circle, draw_right_pointy_circle, draw_left_pointy_circle
 
-  from ._make_primitives import make_cube, make_cylinder, make_capped_cylinder, make_loft, make_polyhedron
+  from ._make_primitives import make_cube, make_cylinder, make_capped_cylinder, make_loft, make_polyhedron, make_sweep
   from ._make_operations import make_fuse
   from ._make_parts import make_teeth, make_screw_thread, make_square_spiral
 

@@ -29,3 +29,14 @@ def plot_arc(
   arc.Angle2 = endAngleDeg
   arc.Placement = FreeCAD.Placement(FreeCAD.Vector(cx, cy, 0), FreeCAD.Rotation(0, 0, 0))
   return WrappedPart(self, arc)
+
+
+def plot_helix(
+  self,
+  step_height,
+  total_height,
+  radius,
+):
+  helix = self.doc.addObject("Part::Feature", "PATH")
+  helix.Shape = Part.makeHelix(step_height, total_height, radius)
+  return WrappedPart(self, helix)
