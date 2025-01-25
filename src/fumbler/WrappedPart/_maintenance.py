@@ -21,3 +21,7 @@ def hide(self):
   self.part.ViewObject.Visibility = False
   return self
 
+def show(self):
+  self.part.ViewObject.Visibility = True
+  return self
+

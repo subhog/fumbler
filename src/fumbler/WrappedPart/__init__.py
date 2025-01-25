@@ -10,8 +10,8 @@ class WrappedPart:
     self.doc = doc
     self.part = part
 
-  from ._maintenance import hide, remove_and_clean, rename, recolor
-  from ._transform import move, elevate, rotate
+  from ._maintenance import hide, show, remove_and_clean, rename, recolor
+  from ._transform import move, elevate, rotate, scale
   from ._boolean import cut, fuse, intersect
   from ._edges import chamfer, fillet
 

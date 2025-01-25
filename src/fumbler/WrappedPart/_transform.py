@@ -25,3 +25,19 @@ def rotate(
   self.part.Placement.rotate(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(axis[0], axis[1], axis[2]), angle, True)
   return self
 
+def scale(
+  self,
+  sx,
+  sy,
+  sz,
+):
+  # placement = self.part.Placement
+  # scale_matrix = FreeCAD.Matrix()
+  # scale_matrix.scale(sx, sy, sz)
+  # print("SCALING", sx, sy, sz)
+  # new_placement = placement * scale_matrix
+  # print(placement)
+  # print(new_placement)
+  # self.part.Placement = new_placement
+  # self.doc.recompute()
+  return self

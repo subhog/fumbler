@@ -23,9 +23,9 @@ class WrappedDocument:
   from ._draw_rectangle import draw_rect, draw_rounded_rect, draw_chamfered_rect
   from ._draw_circle import draw_circle, draw_capped_circle, draw_pointy_circle, draw_right_pointy_circle, draw_left_pointy_circle
 
-  from ._make_primitives import make_cube, make_cylinder, make_capped_cylinder, make_loft, make_polyhedron, make_sweep
+  from ._make_primitives import make_cube, make_cylinder, make_capped_cylinder, make_extruded, make_loft, make_polyhedron, make_sweep
   from ._make_operations import make_fuse
-  from ._make_parts import make_teeth, make_screw_thread, make_square_spiral
+  from ._make_parts import make_teeth, make_screw_thread, make_trapeze_thread, make_square_spiral
 
 
 
