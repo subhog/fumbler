@@ -31,13 +31,13 @@ def scale(
   sy,
   sz,
 ):
-  # placement = self.part.Placement
-  # scale_matrix = FreeCAD.Matrix()
-  # scale_matrix.scale(sx, sy, sz)
-  # print("SCALING", sx, sy, sz)
-  # new_placement = placement * scale_matrix
-  # print(placement)
-  # print(new_placement)
-  # self.part.Placement = new_placement
-  # self.doc.recompute()
+  placement = self.part.Placement
+  scale_matrix = FreeCAD.Matrix()
+  scale_matrix.scale(sx, sy, sz)
+
+  scaled = self.part.Shape.transformGeometry(scale_matrix)
+  self.part.Shape = scaled
+  self.part.Placement = placement
+  
+  self.doc.recompute()
   return self

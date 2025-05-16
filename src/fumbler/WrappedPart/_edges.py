@@ -46,3 +46,16 @@ def chamfer(
   self.part = result
   self.part.Label = label
   return self
+
+
+def all_edges(
+  self,
+):
+  return [i for i, e in enumerate(self.part.Shape.Edges)]
+
+def face_edges(
+  self,
+  face_idx,
+):
+  print(self.part.Shape.Faces[face_idx])
+  # return [i for i, e in enumerate(self.part.Shape.Edges) if self.part.Shape.Faces[face_idx].contains(e)]

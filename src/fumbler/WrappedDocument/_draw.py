@@ -146,6 +146,156 @@ def draw_roller(
   return WrappedPart(self, face)
 
 
+def draw_pillow(
+  self,
+  r,
+  scale = 0.75,
+  name = "Pillow"
+):
+  s = r * scale
+
+  a = Part.BezierCurve()
+  b = Part.BezierCurve()
+  c = Part.BezierCurve()
+  d = Part.BezierCurve()
+
+
+  a.setPoles([
+    FreeCAD.Vector(r, 0, 0),
+    FreeCAD.Vector(r, s, 0),
+    FreeCAD.Vector(s, r, 0),
+    FreeCAD.Vector(0, r, 0),
+  ])
+
+  b.setPoles([
+    FreeCAD.Vector(0, r, 0),
+    FreeCAD.Vector(-s, r, 0),
+    FreeCAD.Vector(-r, s, 0),
+    FreeCAD.Vector(-r, 0, 0),
+  ])
+
+  c.setPoles([
+    FreeCAD.Vector(-r, 0, 0),
+    FreeCAD.Vector(-r, -s, 0),
+    FreeCAD.Vector(-s, -r, 0),
+    FreeCAD.Vector(0, -r, 0),
+  ])
+
+  d.setPoles([
+    FreeCAD.Vector(0, -r, 0),
+    FreeCAD.Vector(s, -r, 0),
+    FreeCAD.Vector(r, -s, 0),
+    FreeCAD.Vector(r, 0, 0),
+  ])
+  
+  beziers = [
+    a.toShape(),
+    b.toShape(),
+    c.toShape(),
+    d.toShape(),
+  ]
+
+  wire = Part.Wire(beziers)
+  face = Part.show(Part.Face(wire), name)
+
+  # for b in beziers:
+    # self.remove_and_clean(b)
+  self.recompute()
+  return WrappedPart(self, face)
+
+
+def draw_pillow_2(
+  self,
+  r,
+  xshift = 0.75,
+  yshift = 0.25,
+  name = "Pillow"
+):
+  s = r * xshift
+  t = r * (1 + yshift)
+
+  a0 = Part.BezierCurve()
+  a1 = Part.BezierCurve()
+  b0 = Part.BezierCurve()
+  b1 = Part.BezierCurve()
+  c0 = Part.BezierCurve()
+  c1 = Part.BezierCurve()
+  d0 = Part.BezierCurve()
+  d1 = Part.BezierCurve()
+
+
+
+  a0.setPoles([
+    FreeCAD.Vector(-r, -r, 0),
+    FreeCAD.Vector(-r, -r, 0),
+    FreeCAD.Vector(-s, -t, 0),
+    FreeCAD.Vector(0, -t, 0),
+  ])
+  a1.setPoles([
+    FreeCAD.Vector(0, -t, 0),
+    FreeCAD.Vector(s, -t, 0),
+    FreeCAD.Vector(r, -r, 0),
+    FreeCAD.Vector(r, -r, 0),
+  ])
+
+  b0.setPoles([
+    FreeCAD.Vector(r, -r, 0),
+    FreeCAD.Vector(r, -r, 0),
+    FreeCAD.Vector(t, -s, 0),
+    FreeCAD.Vector(t, 0, 0),
+  ])
+  b1.setPoles([
+    FreeCAD.Vector(t, 0, 0),
+    FreeCAD.Vector(t, s, 0),
+    FreeCAD.Vector(r, r, 0),
+    FreeCAD.Vector(r, r, 0),
+  ])
+
+  c0.setPoles([
+    FreeCAD.Vector(r, r, 0),
+    FreeCAD.Vector(r, r, 0),
+    FreeCAD.Vector(s, t, 0),
+    FreeCAD.Vector(0, t, 0),
+  ])
+  c1.setPoles([
+    FreeCAD.Vector(0, t, 0),
+    FreeCAD.Vector(-s, t, 0),
+    FreeCAD.Vector(-r, r, 0),
+    FreeCAD.Vector(-r, r, 0),
+  ])
+
+  d0.setPoles([
+    FreeCAD.Vector(-r, r, 0),
+    FreeCAD.Vector(-r, r, 0),
+    FreeCAD.Vector(-t, s, 0),
+    FreeCAD.Vector(-t, 0, 0),
+  ])
+  d1.setPoles([
+    FreeCAD.Vector(-t, 0, 0),
+    FreeCAD.Vector(-t, -s, 0),
+    FreeCAD.Vector(-r, -r, 0),
+    FreeCAD.Vector(-r, -r, 0),
+  ])
+  
+  beziers = [
+    a0.toShape(),
+    a1.toShape(),
+    b0.toShape(),
+    b1.toShape(),
+    c0.toShape(),
+    c1.toShape(),
+    d0.toShape(),
+    d1.toShape(),
+  ]
+
+  wire = Part.Wire(beziers)
+  face = Part.show(Part.Face(wire), name)
+
+  # for b in beziers:
+    # self.remove_and_clean(b)
+  self.recompute()
+  return WrappedPart(self, face)
+
 
 
 def parse_svg_path(svg_path, scale=1):
