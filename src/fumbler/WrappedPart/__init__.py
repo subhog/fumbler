@@ -11,7 +11,7 @@ class WrappedPart:
     self.part = part
 
   from ._maintenance import hide, show, remove_and_clean, rename, recolor
-  from ._transform import move, elevate, rotate, scale
+  from ._transform import move, elevate, rotate, rotate_around, scale
   from ._boolean import cut, fuse, intersect
   from ._edges import chamfer, fillet, all_edges, face_edges
 

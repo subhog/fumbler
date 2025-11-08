@@ -124,6 +124,8 @@ def make_sweep(
   # tooth_b.Visibility = False
 
   self.recompute()
+  path.hide()
+  shape.hide()
   return WrappedPart(self, v)
 
 

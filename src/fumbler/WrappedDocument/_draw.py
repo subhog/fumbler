@@ -56,7 +56,6 @@ def draw_cubic(
   self.recompute()
   return WrappedPart(self, face)
 
-
 def draw_flat_cubic(
   self,
   points,
@@ -87,216 +86,6 @@ def draw_flat_cubic(
     # self.remove_and_clean(b)
   self.recompute()
   return WrappedPart(self, face)
-
-
-def draw_roller(
-  self,
-  n,
-  long_arc,
-  short_arc,
-  name = "Roller"
-):
-  VERTICES_X_DIFFERENCE = math.sin(math.pi / n)
-  VERTICES_Y_DIFFERENCE = 1 + math.cos(math.pi / n)
-  VERTICES_DIAGONAL = math.sqrt(VERTICES_X_DIFFERENCE * VERTICES_X_DIFFERENCE + VERTICES_Y_DIFFERENCE * VERTICES_Y_DIFFERENCE)
-  EPICIRCLE_RADIUS = (long_arc - short_arc) / VERTICES_DIAGONAL
-  ANGLE_DOUBLE_RAD = math.pi * 2 / n
-  ANGLE_DOUBLE_DEG = 360 / n
-  ANGLE_SINGLE_DEG = 180 / n
-  ANGLE_HALF_DEG = 90 / n
-
-
-  arcs = []
-  for i in range(n):
-    j = (i + math.ceil(n / 2)) % n
-    center_i = FreeCAD.Vector(
-      EPICIRCLE_RADIUS * math.cos(ANGLE_DOUBLE_RAD * i),
-      EPICIRCLE_RADIUS * math.sin(ANGLE_DOUBLE_RAD * i),
-      0
-    )
-    center_j = FreeCAD.Vector(
-      EPICIRCLE_RADIUS * math.cos(ANGLE_DOUBLE_RAD * j),
-      EPICIRCLE_RADIUS * math.sin(ANGLE_DOUBLE_RAD * j),
-      0
-    )
-
-    arc = self.doc.addObject("Part::Circle", f"___LONG {i}")
-    arc.Radius = long_arc
-    arc.Angle1 = (180 + ANGLE_DOUBLE_DEG * i - ANGLE_HALF_DEG) % 360
-    arc.Angle2 = (180 + ANGLE_DOUBLE_DEG * i + ANGLE_HALF_DEG) % 360
-    arc.Placement = FreeCAD.Placement(center_i, FreeCAD.Rotation(0, 0, 0))
-    arcs.append(arc)
-    
-    arc = self.doc.addObject("Part::Circle", f"___SHORT {i}")
-    arc.Radius = short_arc
-    arc.Angle1 = (ANGLE_DOUBLE_DEG * j - ANGLE_HALF_DEG) % 360
-    arc.Angle2 = (ANGLE_DOUBLE_DEG * j + ANGLE_HALF_DEG) % 360
-    arc.Placement = FreeCAD.Placement(center_j, FreeCAD.Rotation(0, 0, 0))
-    arcs.append(arc)
-
-  self.recompute()
-  
-  wire = Part.Wire([arc.Shape for arc in arcs])
-  face = Part.show(Part.Face(wire), name)
-
-  for part in arcs:
-    self.remove_and_clean(part)
-
-  self.recompute()
-  return WrappedPart(self, face)
-
-
-def draw_pillow(
-  self,
-  r,
-  scale = 0.75,
-  name = "Pillow"
-):
-  s = r * scale
-
-  a = Part.BezierCurve()
-  b = Part.BezierCurve()
-  c = Part.BezierCurve()
-  d = Part.BezierCurve()
-
-
-  a.setPoles([
-    FreeCAD.Vector(r, 0, 0),
-    FreeCAD.Vector(r, s, 0),
-    FreeCAD.Vector(s, r, 0),
-    FreeCAD.Vector(0, r, 0),
-  ])
-
-  b.setPoles([
-    FreeCAD.Vector(0, r, 0),
-    FreeCAD.Vector(-s, r, 0),
-    FreeCAD.Vector(-r, s, 0),
-    FreeCAD.Vector(-r, 0, 0),
-  ])
-
-  c.setPoles([
-    FreeCAD.Vector(-r, 0, 0),
-    FreeCAD.Vector(-r, -s, 0),
-    FreeCAD.Vector(-s, -r, 0),
-    FreeCAD.Vector(0, -r, 0),
-  ])
-
-  d.setPoles([
-    FreeCAD.Vector(0, -r, 0),
-    FreeCAD.Vector(s, -r, 0),
-    FreeCAD.Vector(r, -s, 0),
-    FreeCAD.Vector(r, 0, 0),
-  ])
-  
-  beziers = [
-    a.toShape(),
-    b.toShape(),
-    c.toShape(),
-    d.toShape(),
-  ]
-
-  wire = Part.Wire(beziers)
-  face = Part.show(Part.Face(wire), name)
-
-  # for b in beziers:
-    # self.remove_and_clean(b)
-  self.recompute()
-  return WrappedPart(self, face)
-
-
-def draw_pillow_2(
-  self,
-  r,
-  xshift = 0.75,
-  yshift = 0.25,
-  name = "Pillow"
-):
-  s = r * xshift
-  t = r * (1 + yshift)
-
-  a0 = Part.BezierCurve()
-  a1 = Part.BezierCurve()
-  b0 = Part.BezierCurve()
-  b1 = Part.BezierCurve()
-  c0 = Part.BezierCurve()
-  c1 = Part.BezierCurve()
-  d0 = Part.BezierCurve()
-  d1 = Part.BezierCurve()
-
-
-
-  a0.setPoles([
-    FreeCAD.Vector(-r, -r, 0),
-    FreeCAD.Vector(-r, -r, 0),
-    FreeCAD.Vector(-s, -t, 0),
-    FreeCAD.Vector(0, -t, 0),
-  ])
-  a1.setPoles([
-    FreeCAD.Vector(0, -t, 0),
-    FreeCAD.Vector(s, -t, 0),
-    FreeCAD.Vector(r, -r, 0),
-    FreeCAD.Vector(r, -r, 0),
-  ])
-
-  b0.setPoles([
-    FreeCAD.Vector(r, -r, 0),
-    FreeCAD.Vector(r, -r, 0),
-    FreeCAD.Vector(t, -s, 0),
-    FreeCAD.Vector(t, 0, 0),
-  ])
-  b1.setPoles([
-    FreeCAD.Vector(t, 0, 0),
-    FreeCAD.Vector(t, s, 0),
-    FreeCAD.Vector(r, r, 0),
-    FreeCAD.Vector(r, r, 0),
-  ])
-
-  c0.setPoles([
-    FreeCAD.Vector(r, r, 0),
-    FreeCAD.Vector(r, r, 0),
-    FreeCAD.Vector(s, t, 0),
-    FreeCAD.Vector(0, t, 0),
-  ])
-  c1.setPoles([
-    FreeCAD.Vector(0, t, 0),
-    FreeCAD.Vector(-s, t, 0),
-    FreeCAD.Vector(-r, r, 0),
-    FreeCAD.Vector(-r, r, 0),
-  ])
-
-  d0.setPoles([
-    FreeCAD.Vector(-r, r, 0),
-    FreeCAD.Vector(-r, r, 0),
-    FreeCAD.Vector(-t, s, 0),
-    FreeCAD.Vector(-t, 0, 0),
-  ])
-  d1.setPoles([
-    FreeCAD.Vector(-t, 0, 0),
-    FreeCAD.Vector(-t, -s, 0),
-    FreeCAD.Vector(-r, -r, 0),
-    FreeCAD.Vector(-r, -r, 0),
-  ])
-  
-  beziers = [
-    a0.toShape(),
-    a1.toShape(),
-    b0.toShape(),
-    b1.toShape(),
-    c0.toShape(),
-    c1.toShape(),
-    d0.toShape(),
-    d1.toShape(),
-  ]
-
-  wire = Part.Wire(beziers)
-  face = Part.show(Part.Face(wire), name)
-
-  # for b in beziers:
-    # self.remove_and_clean(b)
-  self.recompute()
-  return WrappedPart(self, face)
-
-
 
 def parse_svg_path(svg_path, scale=1):
   """Parse an SVG path string and extract commands and points."""
@@ -404,21 +193,25 @@ def draw_svg(self, svg_path, scale=1, name="SVGPath"):
   """Draw a shape from an SVG path using Bezier curves."""
   commands = parse_svg_path(svg_path, scale)
 
-  # print("COMMANDS", commands)
-
   beziers = []
   current_point = None
+  first_point = None
 
   for i, command in enumerate(commands):
     # print(command)
     self.recompute()
+    if first_point is None:
+      first_point = vector(command[1])
+
     if command[0] == 'M':  # Move to
       current_point = vector(command[1])
     elif command[0] == 'L':  # Line to
       next_point = vector(command[1])
-      bezier = Part.BezierCurve()
-      bezier.setPoles([current_point, current_point, next_point, next_point])
-      beziers.append(bezier.toShape())
+      # bezier = Part.BezierCurve()
+      # bezier.setPoles([current_point, current_point, next_point, next_point])
+      # beziers.append(bezier.toShape())
+      # line = self.doc.addObject("Part::Feature")
+      beziers.append(Part.makeLine(current_point, next_point))
       current_point = next_point
     elif command[0] == 'C':  # Cubic Bezier curve
       p1 = vector(command[1])
@@ -430,9 +223,10 @@ def draw_svg(self, svg_path, scale=1, name="SVGPath"):
       current_point = next_point
     elif command == 'Z':  # Close path
       if beziers:  # If there are segments
-        bezier = Part.BezierCurve()
-        bezier.setPoles([current_point, current_point, beziers[0].Vertexes[0], beziers[0].Vertexes[0]])  # Close with line
-        beziers.append(bezier.toShape())
+        # bezier = Part.BezierCurve()
+        # bezier.setPoles([current_point, current_point, beziers[0].Vertexes[0], beziers[0].Vertexes[0]])  # Close with line
+        # beziers.append(bezier.toShape())
+        beziers.append(Part.makeLine(current_point, first_point))
       break
 
   # for bezier in beziers:
