@@ -21,6 +21,7 @@ class WrappedDocument:
   from ._plot import plot_line, plot_arc, plot_helix
   from ._draw import draw_polygon, draw_cubic, draw_flat_cubic, draw_svg
   from ._draw_extra import draw_pillow, draw_pillow_2, draw_rounded_shape, draw_rounded_n_gon, draw_roller
+  from ._draw_n_gon import draw_n_gon, draw_hex
   from ._draw_rectangle import draw_rect, draw_rounded_rect, draw_chamfered_rect
   from ._draw_circle import draw_circle, draw_capped_circle, draw_pointy_circle, draw_right_pointy_circle, draw_left_pointy_circle
 
