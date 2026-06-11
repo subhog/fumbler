@@ -37,9 +37,15 @@ def reload():
   The changes may not take effect until the second time the script is run.
   """
   names = sorted(
-    (name for name in sys.modules if name.startswith("fumbler")),
+    (name for name in list(sys.modules) if name.startswith("fumbler")),
     key=lambda name: name.count("."),
     reverse=True,
   )
   for name in names:
-    importlib.reload(sys.modules[name])
+    module = sys.modules.get(name)
+    if module is None:
+      continue
+    try:
+      importlib.reload(module)
+    except ModuleNotFoundError:
+      del sys.modules[name]

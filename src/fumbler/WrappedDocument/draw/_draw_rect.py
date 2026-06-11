@@ -2,7 +2,7 @@ import FreeCAD, FreeCADGui, Part
 import re
 import math
 from ...WrappedPart import WrappedPart
-from ...utils import Anchor, assert_exclusive_non_zero, first_non_zero
+from ...utils import Anchor, assert_exclusive_non_zero, first_non_none
 
 
 """
@@ -41,18 +41,18 @@ def draw_rect(
   y,
   name = "Rect",
   anchor = Anchor.Corner,
-  round = 0,
-  fi = 0,
-  chamfer = 0,
-  ch = 0,
-  ftl = 0,
-  ftr = 0,
-  fbl = 0,
-  fbr = 0,
-  ctl = 0,
-  ctr = 0,
-  cbl = 0,
-  cbr = 0,
+  round = None,
+  fi = None,
+  chamfer = None,
+  ch = None,
+  ftl = None,
+  ftr = None,
+  fbl = None,
+  fbr = None,
+  ctl = None,
+  ctr = None,
+  cbl = None,
+  cbr = None,
 ):
   assert_exclusive_non_zero([
     ["round", "fi", "chamfer", "ch"],
@@ -76,18 +76,14 @@ def draw_rect(
   })
 
 
-  tl = first_non_zero([ctl, ftl, chamfer, ch, round, fi])
-  tr = first_non_zero([ctr, ftr, chamfer, ch, round, fi])
-  bl = first_non_zero([cbl, fbl, chamfer, ch, round, fi])
-  br = first_non_zero([cbr, fbr, chamfer, ch, round, fi])
-  tl_is_radius = first_non_zero([ftl, round, fi]) > 0 and ctl == 0
-  tr_is_radius = first_non_zero([ftr, round, fi]) > 0 and ctr == 0
-  bl_is_radius = first_non_zero([fbl, round, fi]) > 0 and cbl == 0
-  br_is_radius = first_non_zero([fbr, round, fi]) > 0 and cbr == 0
-
-  print("--------------------------------")
-  print(tl, tr, bl, br)
-  print(tl_is_radius, tr_is_radius, bl_is_radius, br_is_radius)
+  tl = first_non_none([ctl, ftl, chamfer, ch, round, fi])
+  tr = first_non_none([ctr, ftr, chamfer, ch, round, fi])
+  bl = first_non_none([cbl, fbl, chamfer, ch, round, fi])
+  br = first_non_none([cbr, fbr, chamfer, ch, round, fi])
+  tl_is_radius = first_non_none([ftl, round, fi]) > 0 and ctl == None
+  tr_is_radius = first_non_none([ftr, round, fi]) > 0 and ctr == None
+  bl_is_radius = first_non_none([fbl, round, fi]) > 0 and cbl == None
+  br_is_radius = first_non_none([fbr, round, fi]) > 0 and cbr == None
 
   x2 = x / 2
   y2 = y / 2
@@ -113,8 +109,6 @@ def draw_rect(
       else None,
   ]
   lines = [x for x in lines if x is not None]
-  print(len(lines))
-
 
   wire = Part.Wire([line.part.Shape for line in lines])
   face = Part.show(Part.Face(wire), name)

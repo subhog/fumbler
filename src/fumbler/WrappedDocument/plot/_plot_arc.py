@@ -10,7 +10,6 @@ def plot_arc(
   startAngleDeg,
   endAngleDeg,
 ):
-  print("plot_arc", cx, cy, r, startAngleDeg, endAngleDeg)
   arc = self.doc.addObject("Part::Circle")
   arc.Radius = r
   arc.Angle1 = startAngleDeg
