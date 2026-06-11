@@ -22,7 +22,6 @@ useful for decoupling elements before boolean operations.
 def create_wrapped_document(name):
   return WrappedDocument(name)
 
-
 def close_all():
   [FreeCAD.closeDocument(d) for d in FreeCAD.listDocuments()]
 
