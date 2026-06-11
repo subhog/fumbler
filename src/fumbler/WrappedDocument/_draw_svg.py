@@ -3,90 +3,6 @@ import re
 import math
 from ..WrappedPart import WrappedPart
 
-
-
-def draw_polygon(
-  self,
-  points,
-  name = "Polygon"
-):
-  lines = []
-  for idx in range(0, len(points)):
-    a = points[idx]
-    b = points[(idx + 1) % len(points)]
-    lines.append(self.plot_line(a[0], a[1], b[0], b[1]))
-
-  wire = Part.Wire([line.part.Shape for line in lines])
-  face = Part.show(Part.Face(wire), name)
-
-  for line in lines:
-    self.remove_and_clean(line.part)
-  self.recompute()
-  return WrappedPart(self, face)
-
-
-def draw_cubic(
-  self,
-  points,
-  name = "Cubic"
-):
-  beziers = []
-  for i in range(len(points)):
-    j = (i + 1) % len(points)
-    p0 = points[i][0]
-    p1 = points[i][1]
-    p2 = points[i][2]
-    p3 = points[j][0]
-
-    bezier = Part.BezierCurve()
-    # bezier.increaseDegree(3)
-    bezier.setPoles([
-      FreeCAD.Vector(p0[0], p0[1], p0[2]),
-      FreeCAD.Vector(p1[0], p1[1], p1[2]),
-      FreeCAD.Vector(p2[0], p2[1], p2[2]),
-      FreeCAD.Vector(p3[0], p3[1], p3[2]),
-    ])
-    beziers.append(bezier.toShape())
-
-  wire = Part.Wire(beziers)
-  face = Part.show(Part.Face(wire), name)
-
-  # for b in beziers:
-    # self.remove_and_clean(b)
-  self.recompute()
-  return WrappedPart(self, face)
-
-def draw_flat_cubic(
-  self,
-  points,
-  name = "Cubic"
-):
-  beziers = []
-  for i in range(len(points)):
-    j = (i + 1) % len(points)
-    p0 = points[i][0]
-    p1 = points[i][1]
-    p2 = points[i][2]
-    p3 = points[j][0]
-
-    bezier = Part.BezierCurve()
-    # bezier.increaseDegree(3)
-    bezier.setPoles([
-      FreeCAD.Vector(p0[0], p0[1], 0),
-      FreeCAD.Vector(p1[0], p1[1], 0),
-      FreeCAD.Vector(p2[0], p2[1], 0),
-      FreeCAD.Vector(p3[0], p3[1], 0),
-    ])
-    beziers.append(bezier.toShape())
-
-  wire = Part.Wire(beziers)
-  face = Part.show(Part.Face(wire), name)
-
-  # for b in beziers:
-    # self.remove_and_clean(b)
-  self.recompute()
-  return WrappedPart(self, face)
-
 def parse_svg_path(svg_path, scale=1):
   """Parse an SVG path string and extract commands and points."""
   commands = []
@@ -185,9 +101,9 @@ def parse_svg_path(svg_path, scale=1):
     raise BaseException(f"UNKNOWN SVG COMMAND: {command} AT: ${idx}")
   return commands
 
-
 def vector(point):
   return FreeCAD.Vector(point[0], point[1], 0)
+
 
 def draw_svg(self, svg_path, scale=1, name="SVGPath"):
   """Draw a shape from an SVG path using Bezier curves."""
@@ -237,4 +153,3 @@ def draw_svg(self, svg_path, scale=1, name="SVGPath"):
 
   self.recompute()
   return WrappedPart(self, face)
-

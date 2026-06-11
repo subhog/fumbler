@@ -10,10 +10,23 @@ class WrappedPart:
     self.doc = doc
     self.part = part
 
-  from ._maintenance import hide, show, remove_and_clean, rename, recolor
-  from ._transform import move, elevate, rotate, rotate_around, scale
-  from ._boolean import cut, fuse, intersect
-  from ._edges import chamfer, fillet, all_edges, face_edges
+  from ._hide import hide
+  from ._show import show
+  from ._remove_and_clean import remove_and_clean
+  from ._rename import rename
+  from ._recolor import recolor
+  from ._move import move
+  from ._elevate import elevate
+  from ._rotate import rotate
+  from ._rotate_around import rotate_around
+  from ._scale import scale
+  from ._cut import cut
+  from ._fuse import fuse
+  from ._intersect import intersect
+  from ._chamfer import chamfer
+  from ._fillet import fillet
+  from ._all_edges import all_edges
+  from ._face_edges import face_edges
 
 
   def make_copy(self):

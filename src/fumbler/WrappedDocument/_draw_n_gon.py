@@ -30,8 +30,3 @@ def draw_n_gon(
     ])
 
   return self.draw_polygon(points, name)
-
-def draw_hex(
-  self, R, name = "Hex"
-):
-  return self.draw_n_gon(6, R, name)

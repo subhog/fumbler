@@ -3,7 +3,6 @@ import re
 import math
 from ..WrappedPart import WrappedPart
 
-
 def make_fuse(
   self,
   list

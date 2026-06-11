@@ -3,18 +3,6 @@ import re
 import math
 from ..WrappedPart import WrappedPart
 
-
-def recompute(self):
-  self.doc.recompute()
-  return self
-
-
-def flush(self):
-  FreeCADGui.updateGui()
-  FreeCADGui.ActiveDocument.ActiveView.viewAxometric()
-  FreeCADGui.ActiveDocument.ActiveView.fitAll()
-  return self
-
 def remove_and_clean(self, part):
   leftovers = []
   if hasattr(part, "Sections"):
@@ -33,4 +21,3 @@ def remove_and_clean(self, part):
     self.remove_and_clean(item)
 
   return self
-
