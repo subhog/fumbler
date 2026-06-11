@@ -2,7 +2,7 @@ import FreeCAD, FreeCADGui, Part
 import re
 import math
 from ...WrappedPart import WrappedPart
-from ...utils import Anchor, assert_exclusive_non_zero
+from ...utils import Anchor, assert_exclusive_non_zero, first_non_zero
 
 
 """
@@ -76,14 +76,45 @@ def draw_rect(
   })
 
 
+  tl = first_non_zero([ctl, ftl, chamfer, ch, round, fi])
+  tr = first_non_zero([ctr, ftr, chamfer, ch, round, fi])
+  bl = first_non_zero([cbl, fbl, chamfer, ch, round, fi])
+  br = first_non_zero([cbr, fbr, chamfer, ch, round, fi])
+  tl_is_radius = first_non_zero([ftl, round, fi]) > 0 and ctl == 0
+  tr_is_radius = first_non_zero([ftr, round, fi]) > 0 and ctr == 0
+  bl_is_radius = first_non_zero([fbl, round, fi]) > 0 and cbl == 0
+  br_is_radius = first_non_zero([fbr, round, fi]) > 0 and cbr == 0
+
+  print("--------------------------------")
+  print(tl, tr, bl, br)
+  print(tl_is_radius, tr_is_radius, bl_is_radius, br_is_radius)
+
   x2 = x / 2
   y2 = y / 2
   lines = [
-    self.plot_line(x2, y2, -x2, y2),
-    self.plot_line(-x2, y2, -x2, -y2),
-    self.plot_line(-x2, -y2, x2, -y2),
-    self.plot_line(x2, -y2, x2, y2),
+    self.plot_line(x2, -y2 + br,   x2, y2 - tr),
+    self.plot_arc(x2 - tr, y2 - tr, tr, 0, 90) if tr_is_radius
+      else self.plot_line(x2, y2 - tr,   x2 - tr, y2) if tr > 0
+      else None,
+
+    self.plot_line(x2 - tr, y2,   -x2 + tl, y2),
+    self.plot_arc(-x2 + tl, y2 - tl, tl, 90, 180) if tl_is_radius
+      else self.plot_line(-x2 + tl, y2,   -x2, y2 - tl) if tl > 0
+      else None,
+
+    self.plot_line(-x2, y2 - tl,   -x2, -y2 + bl),
+    self.plot_arc(-x2 + bl, -y2 + bl, bl, 180, 270) if bl_is_radius
+      else self.plot_line(-x2, -y2 + bl,   -x2 + bl, -y2) if bl > 0
+      else None,
+
+    self.plot_line(-x2 + bl, -y2,   x2 - br, -y2),
+    self.plot_arc(x2 - br, -y2 + br, br, 270, 360) if br_is_radius
+      else self.plot_line(x2 - br, -y2,   x2, -y2 + br) if br > 0
+      else None,
   ]
+  lines = [x for x in lines if x is not None]
+  print(len(lines))
+
 
   wire = Part.Wire([line.part.Shape for line in lines])
   face = Part.show(Part.Face(wire), name)

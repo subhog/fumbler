@@ -1,8 +1,9 @@
 
 
-- [ ] Prepare a method to test the library as I go
-- [ ] Prepare test_draw_rect.py file (etc.) for generating
+- [X] Prepare a method to test the library as I go
+- [X] Prepare test_draw_rect.py file (etc.) for generating
         the images for the documentation
+- [ ] Add a way to include descriptions in images
 - [ ] Prepare a script to compile the documentation
         directly from source files
 - [ ] Split methods into folders
