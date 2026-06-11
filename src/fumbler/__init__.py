@@ -26,7 +26,20 @@ def close_all():
   [FreeCAD.closeDocument(d) for d in FreeCAD.listDocuments()]
 
 def reload():
-  for name, module in list(sys.modules.items()):
-    if name.startswith("fumbler"):
-      print("RELOADING:", name)
-      importlib.reload(module)
+  """
+  Reload all loaded fumbler submodules so library edits take effect
+  without restarting FreeCAD.
+
+  Submodules must reload deepest-first: WrappedDocument binds methods via
+  `from .draw._draw_rect import draw_rect` at class definition time, so
+  _draw_rect must be refreshed before WrappedDocument is reloaded.
+
+  The changes may not take effect until the second time the script is run.
+  """
+  names = sorted(
+    (name for name in sys.modules if name.startswith("fumbler")),
+    key=lambda name: name.count("."),
+    reverse=True,
+  )
+  for name in names:
+    importlib.reload(sys.modules[name])

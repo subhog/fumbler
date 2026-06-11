@@ -93,12 +93,9 @@ def draw_rect(
   self.recompute()
   
   part = WrappedPart(self, face)
-  print("ANCHOR:", anchor)
   if anchor == Anchor.Corner:
-    print("MOVING")
     part.move((x2, y2, 0))
   elif anchor == Anchor.Edge:
-    print("MOVING TOO")
     part.move((0, y2, 0))
 
   return part
