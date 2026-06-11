@@ -2,7 +2,7 @@ import FreeCAD, FreeCADGui, Part
 import re
 import math
 from ...WrappedPart import WrappedPart
-from ...errors import FumblerConfigurationError
+from ...utils import Anchor, assert_exclusive_non_zero
 
 
 """
@@ -54,25 +54,27 @@ def draw_rect(
   cbl = 0,
   cbr = 0,
 ):
-  global_corner_params = ["round", "fi", "chamfer", "ch"]
-  global_corner_set = [p for p in global_corner_params if p in kwargs]
-  if len(global_corner_set) > 1:
-    raise FumblerConfigurationError(
-      f"Only one of {', '.join(global_corner_params)} may be set, "
-      f"got {', '.join(global_corner_set)}"
-    )
+  assert_exclusive_non_zero([
+    ["round", "fi", "chamfer", "ch"],
+    ["ftl", "ctl"],
+    ["ftr", "ctr"],
+    ["fbl", "cbl"],
+    ["fbr", "cbr"],
+  ], {
+    "round": round,
+    "fi": fi,
+    "chamfer": chamfer,
+    "ch": ch,
+    "ftl": ftl,
+    "ftr": ftr,
+    "fbl": fbl,
+    "fbr": fbr,
+    "ctl": ctl,
+    "ctr": ctr,
+    "cbl": cbl,
+    "cbr": cbr,
+  })
 
-  corner_pairs = [
-    ("ftl", "ctl"),
-    ("ftr", "ctr"),
-    ("fbl", "cbl"),
-    ("fbr", "cbr"),
-  ]
-  for fillet_param, chamfer_param in corner_pairs:
-    if fillet_param in kwargs and chamfer_param in kwargs:
-      raise FumblerConfigurationError(
-        f"Only one of {fillet_param} and {chamfer_param} may be set for a single corner"
-      )
 
   x2 = x / 2
   y2 = y / 2
@@ -89,4 +91,14 @@ def draw_rect(
   for line in lines:
     self.remove_and_clean(line.part)
   self.recompute()
-  return WrappedPart(self, face)
+  
+  part = WrappedPart(self, face)
+  print("ANCHOR:", anchor)
+  if anchor == Anchor.Corner:
+    print("MOVING")
+    part.move((x2, y2, 0))
+  elif anchor == Anchor.Edge:
+    print("MOVING TOO")
+    part.move((0, y2, 0))
+
+  return part

@@ -28,4 +28,5 @@ def close_all():
 def reload():
   for name, module in list(sys.modules.items()):
     if name.startswith("fumbler"):
+      print("RELOADING:", name)
       importlib.reload(module)

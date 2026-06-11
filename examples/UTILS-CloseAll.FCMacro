@@ -1,0 +1,16 @@
+import FreeCAD
+import FreeCADGui as Gui
+
+[FreeCAD.closeDocument(d) for d in FreeCAD.listDocuments()]
+
+try:
+    from PySide6.QtWidgets import QTextEdit
+except ImportError:
+    try:
+        from PySide2.QtWidgets import QTextEdit
+    except ImportError:
+        from PySide.QtGui import QTextEdit
+
+report_view = Gui.getMainWindow().findChild(QTextEdit, "Report view")
+if report_view:
+    report_view.clear()
