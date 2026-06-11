@@ -75,7 +75,6 @@ def draw_rect(
     "cbr": cbr,
   })
 
-
   tl = first_non_none([ctl, ftl, chamfer, ch, round, fi])
   tr = first_non_none([ctr, ftr, chamfer, ch, round, fi])
   bl = first_non_none([cbl, fbl, chamfer, ch, round, fi])
@@ -84,6 +83,13 @@ def draw_rect(
   tr_is_radius = first_non_none([ftr, round, fi]) > 0 and ctr == None
   bl_is_radius = first_non_none([fbl, round, fi]) > 0 and cbl == None
   br_is_radius = first_non_none([fbr, round, fi]) > 0 and cbr == None
+
+  assert x > 0, "Width must be positive"
+  assert y > 0, "Height must be positive"
+  assert tl + bl < y, "Total corner radii are too large for the given height"
+  assert tr + br < y, "Total corner radii are too large for the given height"
+  assert tl + tr < x, "Total corner radii are too large for the given width"
+  assert br + bl < x, "Total corner radii are too large for the given width"
 
   x2 = x / 2
   y2 = y / 2
