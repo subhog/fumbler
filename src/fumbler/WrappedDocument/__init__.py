@@ -51,6 +51,7 @@ class WrappedDocument:
   from .draft._draft_text import draft_text
   from .draft._draft_label import draft_label
   from .draft._draft_linear_dimension import draft_linear_dimension
+  from .draft._draft_linear_label import draft_linear_label
   from .draft._draft_radial_dimension import draft_radial_dimension
   from .draft._draft_angular_dimension import draft_angular_dimension
   from .utils._flush import flush

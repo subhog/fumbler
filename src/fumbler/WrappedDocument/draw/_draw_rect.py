@@ -40,7 +40,7 @@ def draw_rect(
   x,
   y,
   name = "Rect",
-  anchor = Anchor.Corner,
+  anchor = Anchor.Face,
   round = None,
   fi = None,
   chamfer = None,
