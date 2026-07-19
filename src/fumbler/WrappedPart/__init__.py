@@ -15,6 +15,7 @@ class WrappedPart:
   from ._remove_and_clean import remove_and_clean
   from ._rename import rename
   from ._recolor import recolor
+  from ._opacity import opacity
   from ._move import move
   from ._elevate import elevate
   from ._rotate import rotate
