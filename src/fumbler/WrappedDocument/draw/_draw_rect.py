@@ -42,6 +42,7 @@ def draw_rect(
   name = "Rect",
   anchor = Anchor.Face,
   round = None,
+  r = None,
   fi = None,
   chamfer = None,
   ch = None,
@@ -55,13 +56,14 @@ def draw_rect(
   cbr = None,
 ):
   assert_exclusive_non_zero([
-    ["round", "fi", "chamfer", "ch"],
+    ["round", "r", "fi", "chamfer", "ch"],
     ["ftl", "ctl"],
     ["ftr", "ctr"],
     ["fbl", "cbl"],
     ["fbr", "cbr"],
   ], {
     "round": round,
+    "r": r,
     "fi": fi,
     "chamfer": chamfer,
     "ch": ch,
@@ -75,14 +77,14 @@ def draw_rect(
     "cbr": cbr,
   })
 
-  tl = first_non_none([ctl, ftl, chamfer, ch, round, fi])
-  tr = first_non_none([ctr, ftr, chamfer, ch, round, fi])
-  bl = first_non_none([cbl, fbl, chamfer, ch, round, fi])
-  br = first_non_none([cbr, fbr, chamfer, ch, round, fi])
-  tl_is_radius = first_non_none([ftl, round, fi]) > 0 and ctl == None
-  tr_is_radius = first_non_none([ftr, round, fi]) > 0 and ctr == None
-  bl_is_radius = first_non_none([fbl, round, fi]) > 0 and cbl == None
-  br_is_radius = first_non_none([fbr, round, fi]) > 0 and cbr == None
+  tl = first_non_none([ctl, ftl, chamfer, ch, round, fi, r])
+  tr = first_non_none([ctr, ftr, chamfer, ch, round, fi, r])
+  bl = first_non_none([cbl, fbl, chamfer, ch, round, fi, r])
+  br = first_non_none([cbr, fbr, chamfer, ch, round, fi, r])
+  tl_is_radius = first_non_none([ftl, round, fi, r]) > 0 and ctl == None
+  tr_is_radius = first_non_none([ftr, round, fi, r]) > 0 and ctr == None
+  bl_is_radius = first_non_none([fbl, round, fi, r]) > 0 and cbl == None
+  br_is_radius = first_non_none([fbr, round, fi, r]) > 0 and cbr == None
 
   assert x > 0, "Width must be positive"
   assert y > 0, "Height must be positive"

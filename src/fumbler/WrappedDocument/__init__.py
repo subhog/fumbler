@@ -40,6 +40,7 @@ class WrappedDocument:
   from .make._make_extruded import make_extruded
   from .make._make_from import make_from
   from .make._make_fuse import make_fuse
+  from .make._make_intersection import make_intersection
   from .make._make_loft import make_loft
   from .make._make_plot import make_plot
   from .make._make_polyhedron import make_polyhedron

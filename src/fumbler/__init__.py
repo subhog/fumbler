@@ -10,8 +10,8 @@ import importlib
 import sys
 
 from .WrappedDocument import WrappedDocument
+from .utils import TeethInset, TeethSide, CircleCap, Anchor
 
-from .utils import TeethInset, TeethSide, CircleCap
 
 epsilon = 0.0001
 """

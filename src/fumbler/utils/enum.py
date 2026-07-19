@@ -6,7 +6,11 @@ Options and configuration enums
 from enum import Enum
 
 
-Anchor = Enum("Anchor", ["Corner", "Edge", "Face", "Volume"])
+class Anchor(str, Enum):
+  Corner = "Corner"
+  Edge = "Edge"
+  Face = "Face"
+  Volume = "Volume"
 
 
 TeethInset = Enum("TeethInset", ["Inset", "Outset"])
