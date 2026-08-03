@@ -22,6 +22,21 @@ def _outline_straight_edge(edge, radius):
   return Part.Face(boundary)
 
 
+def _fuse_planar_faces(faces):
+  height = FreeCAD.Vector(0, 0, 1)
+  solid = faces[0].extrude(height)
+  for face in faces[1:]:
+    solid = solid.fuse(face.extrude(height))
+
+  planar_faces = [
+    face
+    for face in solid.removeSplitter().Faces
+    if face.BoundBox.ZLength < 0.000001
+    and abs(face.BoundBox.ZMin) < 0.000001
+  ]
+  return max(planar_faces, key=lambda face: face.Area)
+
+
 def draw_outlined(self, thickness):
   if thickness <= 0:
     raise ValueError("thickness must be greater than zero")
@@ -53,7 +68,18 @@ def draw_outlined(self, thickness):
       True,
       False,
     )
+    start = wire.Vertexes[0].Point
+    end = wire.Vertexes[-1].Point
+    start_cap = Part.Face(Part.Wire([
+      Part.makeCircle(half_thickness, start),
+    ]))
+    end_cap = Part.Face(Part.Wire([
+      Part.makeCircle(half_thickness, end),
+    ]))
     outline = side_a.fuse(side_b).removeSplitter()
+    if outline.ShapeType != "Face" and len(outline.Faces) == 1:
+      outline = outline.Faces[0]
+    outline = _fuse_planar_faces([outline, start_cap, end_cap])
 
   if outline.ShapeType != "Face" and len(outline.Faces) == 1:
     outline = outline.Faces[0]
