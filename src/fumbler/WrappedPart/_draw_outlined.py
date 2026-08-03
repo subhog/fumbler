@@ -39,13 +39,21 @@ def draw_outlined(self, thickness):
   ):
     outline = _outline_straight_edge(wire.Edges[0], half_thickness)
   else:
-    outline = wire.makeOffset2D(
+    side_a = wire.makeOffset2D(
       half_thickness,
       0,
       True,
       True,
       False,
     )
+    side_b = wire.makeOffset2D(
+      -half_thickness,
+      0,
+      True,
+      True,
+      False,
+    )
+    outline = side_a.fuse(side_b).removeSplitter()
 
   if outline.ShapeType != "Face" and len(outline.Faces) == 1:
     outline = outline.Faces[0]

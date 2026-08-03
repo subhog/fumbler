@@ -37,3 +37,19 @@ assert len(outlined_line.part.Shape.Faces) == 1
 assert math.isclose(outlined_line.part.Shape.Area, 20 + math.pi, abs_tol=0.001)
 assert math.isclose(outlined_line.part.Shape.BoundBox.XLength, 12, abs_tol=0.001)
 assert math.isclose(outlined_line.part.Shape.BoundBox.YLength, 2, abs_tol=0.001)
+
+p = 1.5
+open_cubic = A.plot_cubic([
+  ((-p, 3*p, 0), (-p, 3.75*p, 0), (-0.75*p, 4*p, 0)),
+  ((0, 4*p, 0), (0.75*p, 4*p, 0), (p, 3.75*p, 0)),
+  ((p, 3*p, 0), (p, 2*p, 0), (-p, 2*p, 0)),
+  ((-p, 0, 0), (0, 0.5*p, 0), (0.75*p, 0, 0)),
+  ((p, 0, 0),),
+])
+one_side = open_cubic.part.Shape.makeOffset2D(0.4, 0, True, True, False)
+outlined_cubic = open_cubic.draw_outlined(0.8)
+
+assert not open_cubic.part.Shape.isClosed()
+assert outlined_cubic.part.Shape.ShapeType == "Face"
+assert len(outlined_cubic.part.Shape.Faces) == 1
+assert outlined_cubic.part.Shape.Area > one_side.Area * 1.8
