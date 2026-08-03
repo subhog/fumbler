@@ -49,6 +49,7 @@ class WrappedDocument:
   from .plot._plot_arc import plot_arc
   from .plot._plot_helix import plot_helix
   from .plot._plot_line import plot_line
+  from .plot._plot_cubic import plot_cubic
   from .draft._draft_text import draft_text
   from .draft._draft_label import draft_label
   from .draft._draft_linear_dimension import draft_linear_dimension

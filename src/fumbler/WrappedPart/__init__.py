@@ -28,6 +28,7 @@ class WrappedPart:
   from ._fillet import fillet
   from ._all_edges import all_edges
   from ._face_edges import face_edges
+  from ._draw_outlined import draw_outlined
 
 
   def make_copy(self):
