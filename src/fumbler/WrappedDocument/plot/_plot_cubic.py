@@ -9,7 +9,10 @@ def plot_cubic(
   name = "Cubic"
 ):
   beziers = []
-  for i in range(len(points)):
+  count = len(points)
+  if len(points[count - 1]) == 1:
+    count = len(points) - 1
+  for i in range(count):
     j = (i + 1) % len(points)
     p0 = points[i][0]
     p1 = points[i][1]
