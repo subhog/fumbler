@@ -22,19 +22,42 @@ def _outline_straight_edge(edge, radius):
   return Part.Face(boundary)
 
 
-def _fuse_planar_faces(faces):
-  height = FreeCAD.Vector(0, 0, 1)
-  solid = faces[0].extrude(height)
-  for face in faces[1:]:
-    solid = solid.fuse(face.extrude(height))
+def _round_open_ends(outline, wire, radius):
+  boundary_edges = list(outline.OuterWire.Edges)
+  endpoints = (
+    (wire.Vertexes[0].Point, wire.Edges[0]),
+    (wire.Vertexes[-1].Point, wire.Edges[-1]),
+  )
 
-  planar_faces = [
-    face
-    for face in solid.removeSplitter().Faces
-    if face.BoundBox.ZLength < 0.000001
-    and abs(face.BoundBox.ZMin) < 0.000001
-  ]
-  return max(planar_faces, key=lambda face: face.Area)
+  for endpoint, source_edge in endpoints:
+    candidates = [
+      edge
+      for edge in boundary_edges
+      if type(edge.Curve) in (Part.Line, Part.LineSegment)
+      and all(
+        (vertex.Point - endpoint).Length < radius * 1.1
+        for vertex in edge.Vertexes
+      )
+    ]
+    cap_edge = min(candidates, key=lambda edge: abs(edge.Length - 2 * radius))
+    boundary_edges.remove(cap_edge)
+
+    inward_point = max(
+      (vertex.Point for vertex in source_edge.Vertexes),
+      key=lambda point: (point - endpoint).Length,
+    )
+    inward = inward_point - endpoint
+    cap_midpoint = endpoint - inward * (radius / inward.Length)
+    boundary_edges.append(Part.Arc(
+      cap_edge.Vertexes[0].Point,
+      cap_midpoint,
+      cap_edge.Vertexes[-1].Point,
+    ).toShape())
+
+  sorted_edges = Part.sortEdges(boundary_edges)
+  if len(sorted_edges) != 1:
+    raise ValueError("could not build a continuous outline boundary")
+  return Part.Face(Part.Wire(sorted_edges[0]))
 
 
 def draw_outlined(self, thickness):
@@ -68,18 +91,10 @@ def draw_outlined(self, thickness):
       True,
       False,
     )
-    start = wire.Vertexes[0].Point
-    end = wire.Vertexes[-1].Point
-    start_cap = Part.Face(Part.Wire([
-      Part.makeCircle(half_thickness, start),
-    ]))
-    end_cap = Part.Face(Part.Wire([
-      Part.makeCircle(half_thickness, end),
-    ]))
     outline = side_a.fuse(side_b).removeSplitter()
     if outline.ShapeType != "Face" and len(outline.Faces) == 1:
       outline = outline.Faces[0]
-    outline = _fuse_planar_faces([outline, start_cap, end_cap])
+    outline = _round_open_ends(outline, wire, half_thickness)
 
   if outline.ShapeType != "Face" and len(outline.Faces) == 1:
     outline = outline.Faces[0]
