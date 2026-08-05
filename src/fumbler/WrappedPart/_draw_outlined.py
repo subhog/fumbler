@@ -30,7 +30,7 @@ def _round_open_ends(outline, wire, radius):
   )
 
   for endpoint, source_edge in endpoints:
-    candidates = [
+    cap_edges = [
       edge
       for edge in boundary_edges
       if type(edge.Curve) in (Part.Line, Part.LineSegment)
@@ -39,19 +39,32 @@ def _round_open_ends(outline, wire, radius):
         for vertex in edge.Vertexes
       )
     ]
-    cap_edge = min(candidates, key=lambda edge: abs(edge.Length - 2 * radius))
-    boundary_edges.remove(cap_edge)
-
-    inward_point = max(
-      (vertex.Point for vertex in source_edge.Vertexes),
-      key=lambda point: (point - endpoint).Length,
+    cap_points = [
+      vertex.Point
+      for edge in cap_edges
+      for vertex in edge.Vertexes
+    ]
+    cap_start, cap_end = max(
+      (
+        (point_a, point_b)
+        for i, point_a in enumerate(cap_points)
+        for point_b in cap_points[i + 1:]
+      ),
+      key=lambda points: (points[0] - points[1]).Length,
     )
-    inward = inward_point - endpoint
+    for edge in cap_edges:
+      boundary_edges.remove(edge)
+
+    first_point = source_edge.valueAt(source_edge.FirstParameter)
+    if (first_point - endpoint).Length < 0.000001:
+      inward = source_edge.tangentAt(source_edge.FirstParameter)
+    else:
+      inward = -source_edge.tangentAt(source_edge.LastParameter)
     cap_midpoint = endpoint - inward * (radius / inward.Length)
     boundary_edges.append(Part.Arc(
-      cap_edge.Vertexes[0].Point,
+      cap_start,
       cap_midpoint,
-      cap_edge.Vertexes[-1].Point,
+      cap_end,
     ).toShape())
 
   sorted_edges = Part.sortEdges(boundary_edges)

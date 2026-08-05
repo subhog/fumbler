@@ -40,10 +40,10 @@ assert math.isclose(outlined_line.part.Shape.BoundBox.YLength, 2, abs_tol=0.001)
 
 p = 1.5
 open_cubic = A.plot_cubic([
-  ((-p, 3*p, 0), (-p, 3.75*p, 0), (-0.75*p, 4*p, 0)),
-  ((0, 4*p, 0), (0.75*p, 4*p, 0), (p, 3.75*p, 0)),
-  ((p, 3*p, 0), (p, 2*p, 0), (-p, 2*p, 0)),
-  ((-p, 0, 0), (0, 0.5*p, 0), (0.75*p, 0, 0)),
+  ((-p, 3*p, 0), (-p, 3.75*p, 0), (-0.5*p, 4*p, 0)),
+  ((0, 4*p, 0), (0.5*p, 4*p, 0), (p, 3.75*p, 0)),
+  ((p, 3*p, 0), (p, 1.75*p, 0), (-p, 2*p, 0)),
+  ((-p, 0, 0), (0, 0.125*p, 0), (0.875*p, 0, 0)),
   ((p, 0, 0),),
 ])
 one_side = open_cubic.part.Shape.makeOffset2D(0.4, 0, True, True, False)
@@ -56,3 +56,15 @@ assert outlined_cubic.part.Shape.ShapeType == "Face"
 assert len(outlined_cubic.part.Shape.Faces) == 1
 assert outlined_cubic.part.Shape.Area > one_side.Area * 1.8
 assert outlined_cubic.part.Shape.Area > flat_outline.Area + 0.9 * math.pi * 0.4**2
+for endpoint in (
+  open_cubic.part.Shape.Vertexes[0].Point,
+  open_cubic.part.Shape.Vertexes[-1].Point,
+):
+  caps = [
+    edge
+    for edge in outlined_cubic.part.Shape.Edges
+    if hasattr(edge.Curve, "Center")
+    and (edge.Curve.Center - endpoint).Length < 0.001
+  ]
+  assert len(caps) == 1
+  assert math.isclose(caps[0].Curve.Radius, 0.4, abs_tol=0.001)
